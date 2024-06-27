@@ -2,6 +2,7 @@
 __version__ = "2024.06.01"
 
 from . import configurator, database
+import sys
 
 root_db = database.Db()
 
@@ -14,24 +15,12 @@ class Configurator(configurator.AbstractConfigurator):
 
 def init_root_db():
     """Initialize the root_db database"""
-    from importlib import import_module
+    from importlib.util import find_spec
     from pathlib import Path
 
-    top_address = "l20m9c3k1qhixcv0msrabz09d"
-    top_name = __name__
     marina = database.MarinaDict(tags={"memory"})
     root_db.path.append(marina)
-    try:
-        config_mod = import_module("init_mooring_configuration")
-    except ImportError:
-        pass
-    else:
-        marina[top_address] = database.mediator_dumps(
-            database.FileInOsMediator(Path(config_mod.__spec__.origin))
-        )
-    cfg = Configurator(top_address)
 
-    @cfg.add_protocol(f"{top_name}.protocol.methodic.Protocol")
     class Handler:
         def __init__(self, ap, preamble):
             pass
@@ -47,7 +36,18 @@ def init_root_db():
                 mod = import_module(extension)
                 mod.add_marina(self, style, **kwargs)
 
-    cfg.run()
+    protopath = f"{__name__}.protocol.methodic.Protocol"
+
+    for name, address in [
+        (x, x + "-address") for x in (f"{__name__}globalconf", f"{__name__}conf")
+    ]:
+        if spec := find_spec(name):
+            marina[address] = database.mediator_dumps(
+                database.FileInOsMediator(Path(spec.origin))
+            )
+            cfg = Configurator(address)
+            cfg.add_protocol(protopath, handler=Handler)
+            cfg.run(missing_ok=True)
 
 
 init_root_db()

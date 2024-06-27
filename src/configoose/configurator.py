@@ -4,6 +4,10 @@ from .util.digattr import dig
 from .util.split_preamble import split_preamble
 
 
+class Error(Exception):
+    pass
+
+
 class AbstractConfigurator(ABC):
     def __init__(self, address):
         self._protocols = {}
