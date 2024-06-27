@@ -1,6 +1,7 @@
 from ..util import format_desc, top_package
 import argparse
 from pathlib import Path
+import site
 
 top_name = top_package.__name__
 
@@ -34,7 +35,12 @@ def main(command, args):
         "--dest",
         metavar="DESTDIR",
         dest="destdir",
-        help="directory on the python path to write the python module. If omitted, module is written to stdout",
+        help=(
+            "directory on the python path to write the python module,"
+            " if value is - the module is written to stdout."
+            " If omitted, module is written to site-packages directory,"
+            " user or global depending on the --global option."
+        ),
         nargs="?",
     )
 
@@ -50,14 +56,19 @@ def main(command, args):
         address=address,
         rootname=rootname,
     )
-    if args.destdir:
+
+    if args.destdir == "-":
+        print(code)
+    else:
+        if not args.destdir:
+            args.destdir = (
+                site.getsitepackages()[0] if args.glob else site.getusersitepackages()
+            )
         dest = Path(args.destdir) / f"{rootname}.py"
         if dest.exists():
             raise RuntimeError(f"Cannot create {dest}: file exists")
         else:
             dest.write_text(code)
-    else:
-        print(code)
 
 
 template = '''\
