@@ -193,7 +193,7 @@ def _(command, args):
         ns.address = random_address()
     preamble = f"""{{
     "address" : "{ns.address}",
-    "protocol" : "{ns.protocol}",
+    "protopath" : "{ns.protocol}",
 }}
 """
     protoclass = dig(*ns.protocol.split("."))

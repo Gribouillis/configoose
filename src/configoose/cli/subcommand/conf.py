@@ -52,7 +52,7 @@ def main(command, args):
     code = template.format(
         tag=f"initial{args.glob}",
         top_name=top_name,
-        marina=marina,
+        marina=str(marina),
         address=address,
         rootname=rootname,
     )
