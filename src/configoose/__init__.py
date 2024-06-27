@@ -1,12 +1,5 @@
 # top package __init__.py
-__version__ = "2024.06.17"
-
-
-def doctopic_assembly():  # pragma: no cover
-    from .doc.itopic import doctopic_assembly
-
-    return doctopic_assembly()
-
+__version__ = "2024.06.01"
 
 from . import configurator, database
 
