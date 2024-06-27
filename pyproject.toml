@@ -4,3 +4,33 @@ requires = [
     "wheel"
 ]
 build-backend = "setuptools.build_meta"
+
+
+[tool.setuptools.dynamic]
+version = {attr = "configoose.__version__"}
+
+
+[project]
+name = "configoose"
+dynamic = ["version"]
+dependencies = [
+    "marshmallow",
+]
+requires-python = ">= 3.7"
+authors = [
+    {name = "Eric Ringeisen"}
+]
+description = "Manage configuration files location"
+readme = "README.md"
+license = {file = "LICENSE"}
+classifiers = [
+    "Intended Audience :: Developers",
+    "Development Status :: Alpha",
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+Repository = "https://github.com/Gribouillis/configoose.git"
+Issues = "https://github.com/Gribouillis/configoose.git/issues"

@@ -1,5 +1,5 @@
 # top package __init__.py
-__version__ = "2024.06.01"
+__version__ = "2024.06.02"
 
 from . import configurator, database
 import sys
