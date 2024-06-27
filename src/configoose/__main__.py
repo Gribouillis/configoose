@@ -1,4 +1,4 @@
-from .cli.util import random_address, format_desc
+from .cli.util import format_desc, random_address, top_package
 from .util.algorithm import algorithm
 from .util.digattr import dig
 from .util.dispatcher import PolymorphicDispatcher
@@ -198,6 +198,12 @@ def _(command, args):
 """
     protoclass = dig(*ns.protocol.split("."))
     print(preamble + protoclass.template_text(), end="")
+
+
+@main.subcommand("version")
+def _(command, args):
+    """Print program's version"""
+    print(top_package.__version__)
 
 
 if __name__ == "__main__":
