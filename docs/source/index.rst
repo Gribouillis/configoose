@@ -11,6 +11,7 @@ Welcome to configoose's documentation!
    :caption: Contents:
 
    intro
+   quickstart
    modules
 
 Indices and tables

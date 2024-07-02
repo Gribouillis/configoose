@@ -1,7 +1,7 @@
 Introduction
 ============
 
-``configoose`` is a module allowing Python programs and
+``configoose`` is a module enabling Python programs and
 libraries to use configuration files while
 leaving users free to store these configuration files
 to the location that suits them in their file system and
@@ -21,10 +21,10 @@ Principle
 
 How can a program find its configuration file
 if it can be anywhere on the file system,
-in a place that the user chooses as he wants?
+in a place that users choose as they want?
 
 ``configoose`` answers this question as follows:
-the program uses an "abstract address" to designate its
+the program uses an :emphasis:`abstract address` to designate its
 configuration file, and it asks a third party where
 is the configuration file that has been registered for this
 abstract address. This third party is the ``configoose``
