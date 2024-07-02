@@ -8,20 +8,6 @@ from importlib import import_module
 import sys
 
 
-def post_process(*ifunc):
-    def decorator(func):
-        @wraps(func)
-        def wrapper(*args, **kwargs):
-            x = func(*args, **kwargs)
-            for f in ifunc:
-                x = f(x)
-            return x
-
-        return wrapper
-
-    return decorator
-
-
 class main(algorithm):
     # dispatcher to add subcommands.
     # Add subcommand with: main.subcommand[name] = callable
