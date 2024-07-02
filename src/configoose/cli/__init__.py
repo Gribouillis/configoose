@@ -84,14 +84,6 @@ class main(algorithm):
         L.extend(gather_command())
         print("".join(L))
 
-    @post_process("\n    ".join)
-    def subcommand_summary(self):
-        # XXX This is broken because commands in main/subcommands are
-        # never reached.
-        for command, callback in sorted(self.subcommand.items()):
-            line = (callback.__doc__ or "").split("\n", 1)[0]
-            yield f"{command}: {line}"
-
 
 def gather_command():
     # list to gather pairs (command_name: str, short_description: str)
