@@ -32,3 +32,9 @@ module. It
 maintains a database connecting abstract addresses
 to configuration file locations and therefore enables
 Python programs or modules to access these files.
+
+Abstract addresses can be arbitrary strings such as
+:code:`my-own-program-configuration` or
+:code:`dc4yhyxxhwu8cymbxne66pvpc`.
+These strings must be specific enough to avoid addresses
+collisions between the configurations of several programs.
