@@ -5,7 +5,7 @@ from ..util.dispatcher import PolymorphicDispatcher
 import argparse
 from functools import wraps
 from importlib import import_module
-import sys
+from pathlib import Path
 
 
 class main(algorithm):
@@ -147,7 +147,7 @@ def _(command, args):
 
 @main.subcommand("template")
 def _(command, args):
-    """Print a template configuration for a protocol"""
+    """Create a template configuration file for a given protocol"""
     parser = argparse.ArgumentParser(
         prog=f"python -m {top_package.__name__} {command}",
         description=format_desc(
@@ -164,6 +164,15 @@ def _(command, args):
         metavar="ADDRESS",
         help="configuration address, defaults to random",
     )
+    parser.add_argument(
+        "-o",
+        "--output",
+        dest="output",
+        metavar="OUTFILE",
+        help="destination file. If not given or equal to '-', print to stdout",
+        nargs="?",
+        default="",
+    )
     parser.add_argument("protocol", metavar="PROTOCOL")
     ns = parser.parse_args(args)
     if not ns.address:
@@ -174,7 +183,11 @@ def _(command, args):
 }}
 """
     protoclass = dig(*ns.protocol.split("."))
-    print(preamble + protoclass.template_text(), end="")
+    text = preamble + protoclass.template_text()
+    if ns.output and ns.output != "-":
+        Path(ns.output).write_text(text)
+    else:
+        print(text, end="")
 
 
 @main.subcommand("version")
