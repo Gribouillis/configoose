@@ -15,7 +15,7 @@ def main(command, args):
         prog=f"python -m {top_package.__name__} {command}",
         description=format_desc(
             """\
-            >Moor a configuration in a marina."""
+            >Moor a configuration file in a marina."""
         ),
     )
     parser.add_argument(
@@ -26,7 +26,6 @@ def main(command, args):
     parser.add_argument(
         "config",
         help=("system path of configuration file to moor"),
-        nargs="?",
         metavar="CONFIGFILE",
     )
     parser.add_argument(
@@ -35,7 +34,7 @@ def main(command, args):
         action="store",
         dest="address",
         required=False,
-        help="mooring address if needed",
+        help="abstract address if needed. If not given, the address is extracted from the configuration file",
     )
     args = parser.parse_args(args)
     # find first marina with the given tag, err if no marina.

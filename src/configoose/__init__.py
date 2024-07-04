@@ -44,10 +44,10 @@ def init_root_db():
 
     protopath = f"{__name__}.protocol.methodic.Protocol"
 
-    # Attempt to load and handle configooseglobalconf.py and configooseconf.py
+    # Attempt to load and handle configoosegconf.py and userconfigooseconf.py
     # These files are discovered by the importlib machinery.
     for name, address in [
-        (x, x + "-address") for x in (f"{__name__}globalconf", f"{__name__}conf")
+        (x, x + "-address") for x in (f"{__name__}conf", f"user{__name__}conf")
     ]:
         if spec := find_spec(name):
             # add discovered file to marina

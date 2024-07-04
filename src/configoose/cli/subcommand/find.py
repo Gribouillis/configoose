@@ -13,7 +13,7 @@ def main(command, args):
     )
 
     parser.add_argument(
-        "address", help="Mooring address of configuration", metavar="ADDRESS"
+        "address", help="Abstract address of configuration", metavar="ADDRESS"
     )
 
     parser.add_argument(

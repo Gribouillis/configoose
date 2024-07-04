@@ -7,20 +7,20 @@ top_name = top_package.__name__
 
 
 def main(command, args):
-    f"""Create file {top_name}conf.py or {top_name}globalconf.py"""
+    f"""Create file {top_name}conf.py or user{top_name}conf.py"""
     parser = argparse.ArgumentParser(
         prog=f"python -m {top_name} {command}",
         description=format_desc(
             f"""\
-            >Create file {top_name}conf.py or {top_name}globalconf.py"""
+            >Create file {top_name}conf.py or user{top_name}conf.py"""
         ),
     )
     parser.add_argument(
-        "-g",
-        "--global",
-        help="create global configuration file",
+        "-u",
+        "--user",
+        help="create user configuration file",
         action="store_true",
-        dest="glob",
+        dest="user",
     )
     parser.add_argument(
         "-m",
@@ -45,12 +45,12 @@ def main(command, args):
     )
 
     args = parser.parse_args(args)
-    args.glob = "global" if args.glob else ""
+    args.user = "user" if args.user else ""
     marina = Path(args.marina).resolve()
-    rootname = f"{top_name}{args.glob}conf"
+    rootname = f"{args.user}{top_name}conf"
     address = f"{rootname}-address"
     code = template.format(
-        tag=f"initial{args.glob}",
+        tag={"initial", "user"} if args.user else {"initial"},
         top_name=top_name,
         marina=str(marina),
         address=address,
@@ -62,7 +62,7 @@ def main(command, args):
     else:
         if not args.destdir:
             args.destdir = (
-                site.getsitepackages()[0] if args.glob else site.getusersitepackages()
+                site.getusersitepackages() if args.user else site.getsitepackages()[0]
             )
         dest = Path(args.destdir) / f"{rootname}.py"
         if dest.exists():
@@ -87,6 +87,6 @@ def configure(handler):
     handler.add_marina(
         path={marina!r},
         style="os-directory",
-        tags={{{tag!r}}},
+        tags={tag!r},
     )
 '''

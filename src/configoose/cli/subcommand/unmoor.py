@@ -10,7 +10,7 @@ def main(command, args):
         prog=f"python -m {top_package.__name__} {command}",
         description=format_desc(
             """\
-            >Unmoor a configuration in a marina."""
+            >Unmoor a configuration file."""
         ),
     )
     parser.add_argument(
@@ -25,7 +25,7 @@ def main(command, args):
         action="store",
         dest="address",
         required=False,
-        help="mooring address if needed",
+        help="abstract address if needed. If not given, the address is exctracted from the configuration file",
     )
     args = parser.parse_args(args)
 
