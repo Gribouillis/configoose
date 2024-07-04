@@ -39,7 +39,7 @@ def main(command, args):
             "directory on the python path to write the python module,"
             " if value is - the module is written to stdout."
             " If omitted, module is written to site-packages directory,"
-            " user or global depending on the --global option."
+            " global or user depending on the --user option."
         ),
         nargs="?",
     )
