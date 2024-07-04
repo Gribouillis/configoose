@@ -50,7 +50,7 @@ def main(command, args):
     rootname = f"{args.user}{top_name}conf"
     address = f"{rootname}-address"
     code = template.format(
-        tag={"initial", "user"} if args.user else {"initial"},
+        tag={"initial", "user"} if args.user else {"initial", "global"},
         top_name=top_name,
         marina=str(marina),
         address=address,
