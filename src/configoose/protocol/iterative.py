@@ -3,6 +3,19 @@ import sys
 
 
 class Protocol(abc.Protocol):
+    """The :emphasis:`iterative` protocol is an experimental configuration protocol
+
+    Like the methodic protocol, it is based on configuration files containing Python code.
+    These configuration files must define a generator function named iconfigure()
+    which generates a sequence of :emphasis:`configuration items`, such as small dictionaries
+    for exemple. For each item, the protocol calls the handler function provided by
+    client code with three arguments
+
+    * The :class:`AddedProtocol` instance given by the configurator.
+    * The :class:`Preamble` extracted from the configuration file
+    * The generated configuration item.
+    """
+
     def run(self, ap, preamble, text):
         from types import ModuleType
 
