@@ -1,4 +1,13 @@
 # top package __init__.py
+"""A module enabling Python programs and libraries to use
+configuration files while leaving users free to store these
+configuration files to the location that suits them in their
+file system and other locations.
+
+.. data:: root_db
+
+    The global database used by configoose
+"""
 __version__ = "2024.06.02"
 
 from . import configurator, database
@@ -8,7 +17,7 @@ root_db = database.Db()
 
 
 class Configurator(configurator.AbstractConfigurator):
-    """Concrete configurator class using default database"""
+    """Concrete configurator class using the global database"""
 
     @property
     def database(self):
@@ -16,7 +25,14 @@ class Configurator(configurator.AbstractConfigurator):
 
 
 def init_root_db():
-    """Initialize the root_db database"""
+    """Initialize the root_db database
+
+    This function is executed when
+    configoose is first imported. It processes the  modules :mod:`configooseconf`
+    and :mod:`userconfigooseconf`, if they exist, to populate the
+    global database by adding marinas. It is not considered an error if these modules
+    don't exist.
+    """
     from importlib import import_module
     from importlib.util import find_spec
     from pathlib import Path
