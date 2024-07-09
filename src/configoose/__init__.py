@@ -8,7 +8,7 @@ file system and other locations.
 
     The global database used by configoose
 """
-__version__ = "2024.06.15"
+__version__ = "2024.06.20"
 
 from . import configurator, database
 import sys
