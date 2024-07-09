@@ -1,5 +1,7 @@
 # configoose
 
+Read the main documentation at [configoose.readthedocs.io](https://configoose.readthedocs.io/en/latest/index.html)
+
 ## Install
 ```
 python -m pip install git+https://github.com/Gribouillis/configoose.git
