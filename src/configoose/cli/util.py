@@ -59,7 +59,8 @@ def format_desc(s, width=70):
     return output.getvalue()
 
 
-def edit_file(filename):  # pragma: no cover
+def edit_file(filename):
+    """Launch platform-dependent editor to edit a file"""
     import os
     import shutil
     import subprocess as sp

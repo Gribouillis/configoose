@@ -12,6 +12,33 @@ class main(algorithm):
     # dispatcher to add subcommands.
     # Add subcommand with: main.subcommand[name] = callable
     # callable signature is Callable(command: str, args: List[str]) -> Any
+    """Implementation of configoose's command line interface. Here is its main
+    usage string
+
+    .. code-block:: text
+
+        usage: python -m configoose [-h] [COMMAND]
+
+        Run various commands relative to configoose.
+
+        positional arguments:
+        COMMAND     Subcommand to run. Use COMMAND -h for details
+
+        options:
+        -h, --help  Print this help to standard output and exit
+
+        Available commands:
+
+        conf                 Create file `configooseconf.py` or `userconfigooseconf.py`
+        find                 Find configuration file
+        marina-list          Display a list of known marinas
+        moor                 Moor a configuration file in a marina
+        random-address       Generate a random address
+        template             Create a template configuration file for a given protocol
+        unmoor               Unmoor a configuration file
+        version              Print program's version
+
+    """
     subcommand = PolymorphicDispatcher()
 
     def run(self, args):
@@ -72,6 +99,7 @@ class main(algorithm):
 
 
 def gather_command():
+    """Function used internally to gather implemented subcommands"""
     # list to gather pairs (command_name: str, short_description: str)
     gathering = []
 
@@ -114,8 +142,22 @@ def run(command, args):
 
 
 @main.subcommand("marina-list")
-def _(command, args):
-    """Display a list of known marinas"""
+def marina_list_(command, args):
+    """Display a list of known marinas
+
+    Implementation of the `marina-list` subcommand.
+    Its usage string is
+
+    .. code-block:: text
+
+        usage: python -m configoose marina-list [-h]
+
+        Display a list of known marinas
+
+        options:
+        -h, --help  show this help message and exit
+
+    """
     parser = argparse.ArgumentParser(
         prog=f"python -m {top_package.__name__} {command}",
         description=format_desc(
@@ -131,8 +173,22 @@ def _(command, args):
 
 
 @main.subcommand("random-address")
-def _(command, args):
-    """Generate a random address"""
+def random_address_(command, args):
+    """Generate a random address
+
+    Implementation of the `random-address` subcommand which usage
+    string is
+
+    .. code-block:: text
+
+        usage: python -m configoose random-address [-h]
+
+        Generate a random address
+
+        options:
+        -h, --help  show this help message and exit
+
+    """
     parser = argparse.ArgumentParser(
         prog=f"python -m {top_package.__name__} {command}",
         description=format_desc(
@@ -146,8 +202,29 @@ def _(command, args):
 
 
 @main.subcommand("template")
-def _(command, args):
-    """Create a template configuration file for a given protocol"""
+def template_(command, args):
+    """Print a template configuration for a protocol
+
+    Implementation of the `template` subcommand
+    which usage string is
+
+    .. code-block:: text
+
+        usage: python -m configoose template [-h] [-a ADDRESS] [-o [OUTFILE]] PROTOCOL
+
+        Print a template configuration for a protocol
+
+        positional arguments:
+        PROTOCOL
+
+        options:
+        -h, --help            show this help message and exit
+        -a ADDRESS, --address ADDRESS
+                                configuration address, defaults to random
+        -o [OUTFILE], --output [OUTFILE]
+                                destination file. If not given or equal to '-', print to stdout
+
+    """
     parser = argparse.ArgumentParser(
         prog=f"python -m {top_package.__name__} {command}",
         description=format_desc(
@@ -191,6 +268,28 @@ def _(command, args):
 
 
 @main.subcommand("version")
-def _(command, args):
-    """Print program's version"""
+def version_(command, args):
+    """Print the package version
+
+    Implementation of the `version` subcommand which usage string is
+
+    .. code-block:: text
+
+        usage: python -m configoose version [-h]
+
+        Print the package version
+
+        options:
+        -h, --help  show this help message and exit
+
+    """
+    parser = argparse.ArgumentParser(
+        prog=f"python -m {top_package.__name__} {command}",
+        description=format_desc(
+            """\
+        >Print the package version"""
+        ),
+        formatter_class=argparse.RawTextHelpFormatter,
+    )
+    parser.parse_args(args)
     print(top_package.__version__)

@@ -5,7 +5,24 @@ import sys
 
 
 def main(command, args):
-    """Find configuration file"""
+    """Find configuration file
+
+    Implementation of the `find` subcommand, which usage string is
+
+    .. code-block:: text
+
+        usage: python -m configoose find [-h] [-e] ADDRESS
+
+        Find a configuration from an address
+
+        positional arguments:
+        ADDRESS     Abstract address of configuration
+
+        options:
+        -h, --help  show this help message and exit
+        -e, --edit  Launch editor if file found
+
+    """
 
     parser = argparse.ArgumentParser(
         prog=f"python -m {top_package.__name__} {command}",

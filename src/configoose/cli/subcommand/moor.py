@@ -10,7 +10,27 @@ class TagNotFoundError(Exception):
 
 
 def main(command, args):
-    """Moor a configuration file in a marina"""
+    """Moor a configuration file in a marina
+
+    Implementation of the :code:`moor` subcommand which usage string is
+
+    .. code-block:: text
+
+        usage: python -m configoose moor [-h] [-a ADDRESS] MARINA CONFIGFILE
+
+        Moor a configuration file in a marina.
+
+        positional arguments:
+        MARINA                tag of target marina
+        CONFIGFILE            system path of configuration file to moor
+
+        options:
+        -h, --help            show this help message and exit
+        -a ADDRESS, --address ADDRESS
+                                abstract address if needed. If not given, the address is extracted
+                                from the configuration file
+
+    """
     parser = argparse.ArgumentParser(
         prog=f"python -m {top_package.__name__} {command}",
         description=format_desc(

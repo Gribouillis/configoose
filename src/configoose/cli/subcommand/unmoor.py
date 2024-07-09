@@ -5,7 +5,27 @@ from pathlib import Path
 
 
 def main(command, args):
-    """Unmoor a configuration file"""
+    """Unmoor a configuration file
+
+    Implementation of the :code:`unmoor` subcommand which
+    usage string is
+
+    .. code-block:: text
+
+        usage: python -m configoose unmoor [-h] [-a ADDRESS] [CONFIGFILE]
+
+        Unmoor a configuration file.
+
+        positional arguments:
+        CONFIGFILE            system path of configuration file to unmoor
+
+        options:
+        -h, --help            show this help message and exit
+        -a ADDRESS, --address ADDRESS
+                                abstract address if needed. If not given, the address is
+                                exctracted from the configuration file
+
+    """
     parser = argparse.ArgumentParser(
         prog=f"python -m {top_package.__name__} {command}",
         description=format_desc(
