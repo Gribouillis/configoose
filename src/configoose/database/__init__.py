@@ -8,18 +8,72 @@ from pathlib import Path
 from reprlib import recursive_repr as _recursive_repr
 
 
-class Db(Mapping):
-    """Groups multiple marinas to create a single view.
+# mediators are serializable with MediatorSchema
+# keep the Mediator interface minimal.
+# Concrete subclasses define access to concrete storage
+# support.
+class Mediator(ABC):
+    """This is the base class of mediator objects which
+    can be seen as smart pointers giving access to
+    configuration content. Mediators have two main features:
 
-    Conceptually similar to a collections.ChainMap, but
-    uses Marina instances intead of dicts.
+    * They give access to configuration content through their
+      :func:`read_text` or :func:`read_bytes` methods.
+    * They can be serialized to strings that are stored
+      as values in :class:`Marina` mappings.
+
+    Subclasses of :class:`Mediator` implement concrete
+    access to configuration content in specific storage.
+    """
+
+    @abstractmethod
+    def read_bytes(self) -> bytes:
+        """Read configuration content as bytes"""
+        ...
+
+    def read_text(self, encoding: str = "utf8") -> str:
+        """Read configuration content as a unicode string.
+        The default implementation uses :func:`read_bytes`
+
+        :param encoding: unicode encoding, defaults to utf8
+        :type encoding: str
+        """
+        return self.read_bytes().decode(encoding)
+
+    @classmethod
+    @abstractmethod
+    def schema_type(cls):
+        """This required classmethod returns a subclass of :class:`marshmallow.Schema`
+        which is used to serialize instances of this class.
+
+        Instances of :class:`Mediator` are serialized to be stored as values
+        in :class:`Marina` objects and deserialized during lookups in
+        :class:`Db` objects.
+        """
+        ...
+
+    def system_path(self):
+        """Return a system path of this mediator if available, else None"""
+
+
+class Db(Mapping[str, Mediator]):
+    """The :class:`Db` class is the type of :mod:`configoose`'s
+    main database. It maps abstract configuration addresses (strings)
+    to mediators giving access to configuration content.
+
+    It is built upon a sequence of marinas, creating a
+    single view of this sequence.
 
     The underlying marinas are stored in a list. That list
     is public and can be accessed or updated using the
     *path* attribute. There is no other state.
 
     Lookups search the underlying marinas successively
-    until a key is found.
+    until a key is found. This is conceptually similar
+    to a collections.ChainMap except that the values
+    found are deserialized before return: lookups return
+    Mediator instances instead of serialized mediators
+    which are stored into marinas.
     """
 
     # Implementation largely inspired from ChainMap.
@@ -79,8 +133,14 @@ class Db(Mapping):
     __ror__ = None
 
 
-class Marina(MutableMapping):
-    """Base class for marinas"""
+class Marina(MutableMapping[str, str]):
+    """This is the base class of marina objects. They
+    are mutable mappings that map strings to strings.
+    They are used to associate abstract configuration
+    addresses to serialized :class:`Mediator` instances.
+
+    :param tags: A set of strings used to identify marinas
+    """
 
     __eq__ = object.__eq__
     __ne__ = object.__ne__
@@ -92,12 +152,31 @@ class Marina(MutableMapping):
     def __repr__(self):
         return f"<{type(self).__name__}(tags={self.tags!r})>"
 
-    def is_valid_key(self, key, keyerror=False):
+    def is_valid_key(self, key: str, keyerror: bool = False) -> bool:
+        """Indicates whether a given key is valid for this marina type.
+
+        :param key: a configuration address
+        :type key: str
+        :param keyerror: if set, the function raises `KeyError`
+          for invalid keys instead of returning `False`. Defaults
+          to `False` (don't raise `KeyError`)
+        :type keyerror: bool
+        :return: a boolean indicating if the key is valid
+        :rtype: bool
+
+        In the base class :class:`Marina`, this function always returns `True`
+        but concrete subclasses may whish to exclude some keys.
+        """
         return True
 
 
 class MarinaDict(dict, Marina):
-    """Marina built on a dict instance"""
+    """Subclass of :class:`Marina` built on a dict instance. As these marinas
+    are not persistent, they can only be used temporarily
+    in a single process.
+
+    :param tags: A set of strings used to identify marinas
+    """
 
     def __init__(self, tags=()):
         Marina.__init__(self, tags=tags)
@@ -110,7 +189,20 @@ class MarinaDict(dict, Marina):
 
 
 class MarinaDirInOs(Marina):
-    def __init__(self, path, tags=()):
+    """Subclass of :class:`Marina` built on a file system directory.
+    Pairs `(key, value)` are stored in the directory as a
+    file name and a file content.
+
+    As a consequence, not every key is allowed in such a marina,
+    for example `spam/ham` is not a valid filename in a directory
+    in Linux, but `spam-ham` is.
+
+    :param path: The path to the underlying directory
+    :type path: `pathlib.Path`
+    :param tags: A set of strings used to identify marinas
+    """
+
+    def __init__(self, path: Path, tags=()):
         if not isinstance(path, Path):
             raise TypeError("Expected pathlib.Path instance, got", repr(path))
         super().__init__(tags=tags)
@@ -155,36 +247,24 @@ class MarinaDirInOs(Marina):
             return False
 
 
-# mediators are serializable with MediatorSchema
-# keep the Mediator interface minimal.
-# Concrete subclasses define access to concrete storage
-# support.
-class Mediator(ABC):
-    @abstractmethod
-    def read_bytes(self):
-        raise NotImplementedError
-
-    def read_text(self, encoding="utf8"):
-        return self.read_bytes().decode(encoding)
-
-    @classmethod
-    @abstractmethod
-    def schema_type(cls):
-        ...
-
-    def system_path(self):
-        """Return a system path of self if available, else None"""
-
-
-def mediator_dumps(med):
+def mediator_dumps(med: Mediator) -> str:
+    """Serialize a mediator as a string"""
     return MediatorSchema().dumps(med)
 
 
-def mediator_loads(s):
+def mediator_loads(s: str) -> Mediator:
+    """Deserialize a string as a mediator"""
     return MediatorSchema().loads(s)
 
 
 class MediatorSchema(ms.Schema):
+    """A subclass of `marshmallow.Schema` used internally
+    to serialize all instances of :class:`Mediator`.
+
+    Don't use this class directly. Use instead the functions
+    :func:`mediator_dumps` and :func:`mediator_loads`
+    """
+
     module = ms.fields.Str()
     qualname = ms.fields.Str()
     instance = ms.fields.Dict()
@@ -211,6 +291,12 @@ class MediatorSchema(ms.Schema):
 
 
 class FileInOsMediator(Mediator):
+    """A class of mediators pointing to configuration files
+    stored as regular files in the file system.
+
+    :param path: the path to the underlying file
+    """
+
     def __init__(self, path):
         self.path = Path(path)
 
@@ -228,10 +314,15 @@ class FileInOsMediator(Mediator):
         return FileInOsSchema
 
     def system_path(self):
+        """Return the path to the underlying file of this mediator"""
         return self.path
 
 
 class FileInOsSchema(ms.Schema):
+    """A subclass of `marshmallow.Schema` used to
+    serialized instances of :class:`FileInOsMediator`
+    """
+
     path = ms.fields.Str()
 
     @ms.post_load
@@ -240,6 +331,7 @@ class FileInOsSchema(ms.Schema):
 
 
 def ilen(iterable):
+    """Utility function returning the length of an iterable"""
     # taken from more_itertools (MIT)
     counter = count()
     deque(zip(iterable, counter), maxlen=0)

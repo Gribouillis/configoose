@@ -45,9 +45,10 @@ class AbstractConfigurator(ABC):
         :param missing_ok: indicates that an absence of configuration file must be silently ignored. Defaults to False
         :type missing_ok: bool
 
-        The configurator triesr to find a configuration file corresponding to
+        By a lookup in the database, the configurator tries to find a configuration
+        file corresponding to
         the address given to the constructor. If this succeeds, it reads the
-        preamble of this file to extract the protocol. If this protocol has
+        preamble of the configuration file to extract the protocol. If this protocol has
         been added to the configurator, it instanciates the protocol class
         and calls the protocol's `run()` method, passing it the :class:`AddedProtocol`
         instance, the preamble and the remaining text of the configuration file.
@@ -75,8 +76,8 @@ class AbstractConfigurator(ABC):
 class AddedProtocol:
     """Object returned by configurators :func:`add_protocol` and passed to :func:`Protocol.run` methods.
 
-    :param args: additional tuple of data
-    :param kwargs: additional dict of data
+    :param args: additional tuple of arguments
+    :param kwargs: additional dict of arguments
     """
 
     def __init__(self, args, kwargs):

@@ -15,7 +15,7 @@ Initialization
 
 ``configoose`` manages a database. To initialize it you must create
 a new directory, called a :emphasis:`marina`.
-The syntax depends on your operational system:
+The syntax depends on your operating system:
 
 .. code-block:: bash
 
