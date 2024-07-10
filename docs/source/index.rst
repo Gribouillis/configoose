@@ -6,7 +6,7 @@
 Welcome to configoose's documentation!
 ======================================
 
-   version: 2024.06.20
+   version: 2024.06.21
 
 .. toctree::
    :maxdepth: 2

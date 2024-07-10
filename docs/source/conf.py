@@ -9,7 +9,7 @@
 project = "configoose"
 copyright = "2024, Eric Ringeisen"
 author = "Eric Ringeisen"
-release = "2024.06.03"
+release = "2024.06.21"
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
