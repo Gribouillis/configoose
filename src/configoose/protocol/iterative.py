@@ -16,7 +16,7 @@ class Protocol(abc.Protocol):
     * The generated configuration item.
     """
 
-    def run(self, ap, preamble, text):
+    def run(self, ap, preamble, text, med):
         from types import ModuleType
 
         mod = ModuleType(f"{__name__}.mooring.{preamble['address']}")

@@ -14,7 +14,7 @@ class Protocol(abc.Protocol):
     * the :class:`ConfigParser` instance used to parse the configuration.
     """
 
-    def run(self, ap, preamble, text):
+    def run(self, ap, preamble, text, med):
         parser = ConfigParser()
         parser.read_string(text)
         if handler := ap.kwargs.get("handler", None):

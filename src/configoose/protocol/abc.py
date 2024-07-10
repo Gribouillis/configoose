@@ -18,13 +18,14 @@ class Protocol(ABC):
     """
 
     @abstractmethod
-    def run(self, address: str, text: str, ap: "AddedProtocol"):  # pragma: no cover
+    def run(self, app: "AddedProtocol", preamble: "Preamble", text: str, med: "Mediator"):
         """Configure a module according to this protocol
 
-        :param address: the abstract address of the configuration
-        :param text: the text read from the configuration file (without the preamble)
         :param ap: the :class:`AddedProtocol` instance passed by the configurator. Enables access to
             a handler function defined by the client code.
+        :param preamble: the preamble extracted from the configuration
+        :param text: the text read from the configuration (without the preamble)
+        :param med: the Mediator instance used to access the configuration
         """
         ...
 

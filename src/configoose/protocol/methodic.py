@@ -26,7 +26,7 @@ class Protocol(abc.Protocol):
     how to configure a file with this protocol.
     """
 
-    def run(self, ap, preamble, text):
+    def run(self, ap, preamble, text, med):
         from types import ModuleType
 
         mod = ModuleType(f"{__name__}.mooring.{preamble['address']}")

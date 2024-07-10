@@ -70,7 +70,7 @@ class AbstractConfigurator(ABC):
                 return
             else:
                 raise
-        dig(*preamble["protopath"].split("."))().run(ap, preamble, text)
+        dig(*preamble["protopath"].split("."))().run(ap, preamble, text, mediator)
 
 
 class AddedProtocol:
