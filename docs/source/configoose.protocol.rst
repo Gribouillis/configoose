@@ -36,6 +36,14 @@ configoose.protocol.methodic module
    :undoc-members:
    :show-inheritance:
 
+configoose.protocol.raw module
+-----------------------------------
+
+.. automodule:: configoose.protocol.raw
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Module contents
 ---------------
 
