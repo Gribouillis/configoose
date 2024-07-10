@@ -6,7 +6,8 @@
 Welcome to configoose's documentation!
 ======================================
 
-   version: 2024.06.21
+* `Main site <https://github.com/Gribouillis/configoose>`_
+* version: 2024.06.21
 
 .. toctree::
    :maxdepth: 2
