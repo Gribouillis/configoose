@@ -17,6 +17,7 @@ Welcome to configoose's documentation!
    quickstart
    configurators
    files
+   extending
    modules
 
 Indices and tables
