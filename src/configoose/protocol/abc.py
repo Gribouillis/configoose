@@ -18,7 +18,9 @@ class Protocol(ABC):
     """
 
     @abstractmethod
-    def run(self, app: "AddedProtocol", preamble: "Preamble", text: str, med: "Mediator"):
+    def run(
+        self, app: "AddedProtocol", preamble: "Preamble", text: str, med: "Mediator"
+    ):
         """Configure a module according to this protocol
 
         :param ap: the :class:`AddedProtocol` instance passed by the configurator. Enables access to

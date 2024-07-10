@@ -1,5 +1,4 @@
 from . import abc
-from configparser import ConfigParser
 
 
 class Protocol(abc.Protocol):
@@ -17,4 +16,3 @@ class Protocol(abc.Protocol):
     def run(self, ap, preamble, text, med):
         if handler := ap.kwargs.get("handler", None):
             handler(ap, preamble, text, med)
-
