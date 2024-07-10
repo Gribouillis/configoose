@@ -30,6 +30,8 @@ class Protocol(abc.Protocol):
         from types import ModuleType
 
         mod = ModuleType(f"{__name__}.mooring.{preamble['address']}")
+        if p := med.system_path():
+            mod.__file__ = str(p)
         sys.modules[mod.__name__] = mod
         try:
             exec(text, vars(mod))

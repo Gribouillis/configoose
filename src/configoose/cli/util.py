@@ -25,12 +25,17 @@ def format_desc(s, width=70):
     """Function to format description in argparse arguments
 
     Usage:
+
+    .. code-block:: python
+
         arparse.ArgumentParser(
             ...
             description = format_desc(...),
             formatter_class=argparse.RawTextHelpFormatter,
             ...
-        )"""
+        )
+
+    """
     import io
     from textwrap import dedent, fill
 

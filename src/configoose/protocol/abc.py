@@ -30,11 +30,15 @@ class Protocol(ABC):
         ...
 
     @classmethod
-    @abstractmethod
-    def template_text(cls):
+    def template_text(cls) -> str:
         """Return a basic template configuration for this protocol (without preamble)
 
         This is intended to give users a starting point when they write a configuration
         file for this protocol.
+
+        :return: a string usable as basic configuration for this protocol
+        :rtype: str
+
+        The default implementation returns an empty string.
         """
-        ...
+        return ""
